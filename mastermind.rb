@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Main class that contains the main code of the
+# Main class that contains the main code of the game
 class Mastermind
   attr_reader :correct_answer, :codebreaker
   attr_accessor :total_guesses
@@ -11,6 +11,7 @@ class Mastermind
     self.total_guesses = []
   end
 
+  # runs if the user is the codebreaker
   def start_user
     guesses = []
     puts 'Computer has chosen a code. Time to break it, stinky!'
@@ -32,6 +33,7 @@ class Mastermind
     end
   end
 
+  # Runs if the computer is the codebreaker
   def start_computer
     self.total_guesses = Computer.all_guesses
     (1..12).each do |turn_number|
@@ -54,6 +56,8 @@ class Mastermind
     end
   end
 
+  # Takes guess and compares it to the correct answer to get the
+  # total number of red and white hints
   def compare(guess, correct_answer)
     hint_hash = { red: 0, white: 0 }
     guess_array = guess.to_s.split('')
@@ -74,6 +78,8 @@ class Mastermind
     hint_hash
   end
 
+  # References compare() to get the number of hints, then uses
+  # Donald Knuth's 5 guess algorithm to eliminate certain guesses from guess pool
   def compare_computer(guess, correct_answer)
     current_hash = compare(guess, correct_answer)
     new_guesses = total_guesses.select do |value|
@@ -83,6 +89,7 @@ class Mastermind
     current_hash
   end
 
+  # only used by computer, prints computer guess character-by-character
   def slow_type(guess)
     guess_array = guess.to_s.split('')
     guess_array.each do |value|
@@ -92,6 +99,7 @@ class Mastermind
     puts ''
   end
 
+  # Declares the winner of the game
   def winner(guess, turn_number)
     if codebreaker == 'user'
       puts "Congratulations! #{guess} was the correct answer. It took you #{turn_number} guesses!"
